@@ -20,41 +20,34 @@ st.markdown(
     }
     h1, h3 {
         font-family: 'Segoe UI', Tahoma, sans-serif;
-        color: #ffffff;
+        color: #ffffff !important;
         text-shadow: 2px 2px 8px #ff7f50;
         text-align: center;
     }
     .stButton>button {
-        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
-        color: #000000;
-        font-weight: bold;
-        border-radius: 12px;
-        padding: 10px 25px;
-        border: none;
+        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%) !important;
+        color: #000000 !important;
+        font-weight: bold !important;
+        border-radius: 12px !important;
+        padding: 10px 25px !important;
+        border: none !important;
     }
     textarea {
-        border-radius: 10px;
+        border-radius: 10px !important;
         border: 2px solid #FF8C00 !important;
     }
 
-    /* Translated text box (st.info) ko dark aur text ko white karne ke liye */
-    div[data-testid="stNotification"] {
-        background-color: #262730 !important; /* Dark color like dropdowns */
-        color: #ffffff !important; /* Pure white text */
-        border-radius: 10px;
-        border: 1px solid #475569;
+    /* --- YE SECTION BOX KO DARK AUR TEXT KO WHITE KAREGA --- */
+    .translated-box {
+        background-color: #262730 !important; /* Exactly like selectbox */
+        color: #ffffff !important;           /* Pure white text */
+        padding: 20px !important;
+        border-radius: 10px !important;
+        border: 1px solid #475569 !important;
+        font-size: 18px !important;
+        margin-bottom: 20px !important;
+        min-height: 60px;
     }
-
-    /* Box ke andar ka text force white karne ke liye */
-    div[data-testid="stNotification"] div {
-        color: #ffffff !important;
-    }
-
-    /* Icon color ko white karne ke liye */
-    div[data-testid="stNotification"] svg {
-        fill: #ffffff !important;
-    }
-
     </style>
     """,
     unsafe_allow_html=True
@@ -84,8 +77,8 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # st.info use kiya hai jo upar CSS se style ho chuka hai
-            st.info(result)
+            # --- YAHAN CHANGE KIYA HAI: Custom box display ---
+            st.markdown(f'<div class="translated-box">{result}</div>', unsafe_allow_html=True)
             
             st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
         except Exception as e:
