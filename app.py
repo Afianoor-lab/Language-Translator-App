@@ -37,27 +37,29 @@ st.markdown(
         border: 2px solid #FF8C00 !important;
     }
 
+    /* Translated text box ko dark karne ke liye */
+    .stMarkdown div[data-testid="stMarkdownContainer"] p, 
+    .stWrite {
+        background-color: #1e293b; /* Dark Slate color */
+        color: #ffffff !important; /* White text */
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #475569;
+    }
 
-/* Translated text box ko dark karne ke liye */
-.stMarkdown div[data-testid="stMarkdownContainer"] p, 
-.stWrite {
-    background-color: #1e293b; /* Dark Slate color */
-    color: #ffffff !important; /* White text */
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #475569;
-}
-
-/* Agar aap st.info use kar rahi hain to usay bhi dark karne ke liye */
-div[data-testid="stNotification"] {
-    background-color: #1e293b !important;
-    color: white !important;
-    border: 1px solid #475569;
-}
-
-
-
+    /* st.info (Notification) ko dark aur white text dene ke liye */
+    div[data-testid="stNotification"] {
+        background-color: #1e293b !important;
+        color: white !important;
+        border-radius: 10px;
+        border: 1px solid #475569;
+    }
     
+    /* Icon ka color bhi white karne ke liye */
+    div[data-testid="stNotification"] svg {
+        fill: #ffffff !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -86,6 +88,8 @@ if st.button("Translate"):
         try:
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
+            
+            # Using st.info which is now styled as dark with white text
             st.info(result)
             
             st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
