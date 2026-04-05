@@ -36,6 +36,28 @@ st.markdown(
         border-radius: 10px;
         border: 2px solid #FF8C00 !important;
     }
+
+
+/* Translated text box ko dark karne ke liye */
+.stMarkdown div[data-testid="stMarkdownContainer"] p, 
+.stWrite {
+    background-color: #1e293b; /* Dark Slate color */
+    color: #ffffff !important; /* White text */
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #475569;
+}
+
+/* Agar aap st.info use kar rahi hain to usay bhi dark karne ke liye */
+div[data-testid="stNotification"] {
+    background-color: #1e293b !important;
+    color: white !important;
+    border: 1px solid #475569;
+}
+
+
+
+    
     </style>
     """,
     unsafe_allow_html=True
