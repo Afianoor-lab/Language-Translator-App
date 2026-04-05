@@ -20,46 +20,41 @@ st.markdown(
     }
     h1, h3 {
         font-family: 'Segoe UI', Tahoma, sans-serif;
-        color: #ffffff !important;
+        color: #ffffff;
         text-shadow: 2px 2px 8px #ff7f50;
         text-align: center;
     }
     .stButton>button {
-        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%) !important;
-        color: #000000 !important;
-        font-weight: bold !important;
-        border-radius: 12px !important;
-        padding: 10px 25px !important;
-        border: none !important;
+        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+        color: #000000;
+        font-weight: bold;
+        border-radius: 12px;
+        padding: 10px 25px;
+        border: none;
     }
     textarea {
-        border-radius: 10px !important;
-        border: 2px solid #FF8C00 !important;
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
-
-    /* --- NEW UPDATED TRANSLATED BOX STYLE --- */
-    .result-box {
-        background-color: #262730 !important; /* Matches Streamlit's dark selectbox background */
-        color: #ffffff !important;           /* Pure white text */
-        padding: 15px !important;
-        border-radius: 10px !important;
-        border: 1px solid #475569 !important;
-        font-size: 18px !important;
-        margin-bottom: 20px !important;
-    }
-
-    /* Safeguard for info boxes */
-    div[data-testid="stNotification"] {
-        background-color: #262730 !important;
-        color: white !important;
         border-radius: 10px;
+        border: 2px solid #FF8C00 !important;
     }
-    
+
+    /* Translated text box (st.info) ko dark aur text ko white karne ke liye */
+    div[data-testid="stNotification"] {
+        background-color: #262730 !important; /* Dark color like dropdowns */
+        color: #ffffff !important; /* Pure white text */
+        border-radius: 10px;
+        border: 1px solid #475569;
+    }
+
+    /* Box ke andar ka text force white karne ke liye */
+    div[data-testid="stNotification"] div {
+        color: #ffffff !important;
+    }
+
+    /* Icon color ko white karne ke liye */
     div[data-testid="stNotification"] svg {
         fill: #ffffff !important;
     }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -73,7 +68,7 @@ translator = GoogleTranslator()
 langs_dict = translator.get_supported_languages(as_dict=True)
 languages = {name.title(): code for name, code in langs_dict.items()}
 
-text_to_translate = st.text_area("Enter text to translate:", height=150)
+text_to_translate = st.text_area("Enter text to translate:")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -89,8 +84,8 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # Displaying result in the custom dark box with white text
-            st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
+            # st.info use kiya hai jo upar CSS se style ho chuka hai
+            st.info(result)
             
             st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
         except Exception as e:
