@@ -39,36 +39,27 @@ st.markdown(
         color: #000000 !important;
     }
 
-    /* CUSTOM DARK BOX FOR TRANSLATED TEXT - JUST ADDED THIS SECTION */
+    /* --- NEW UPDATED TRANSLATED BOX STYLE --- */
     .result-box {
-        background-color: #1E293B !important; /* Deep Dark Blue/Black */
-        color: #ffffff !important;           /* Pure White Text */
-        padding: 20px !important;
+        background-color: #262730 !important; /* Matches Streamlit's dark selectbox background */
+        color: #ffffff !important;           /* Pure white text */
+        padding: 15px !important;
         border-radius: 10px !important;
-        border: 2px solid #475569 !important;
+        border: 1px solid #475569 !important;
         font-size: 18px !important;
-        margin-top: 10px !important;
-        min-height: 100px !important;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.3) !important;
-    }
-    
-    /* Force White text inside the box */
-    .result-box p {
-        color: #ffffff !important;
+        margin-bottom: 20px !important;
     }
 
-    /* Backward compatibility for st.info if used */
+    /* Safeguard for info boxes */
     div[data-testid="stNotification"] {
-        background-color: #1e293b !important;
+        background-color: #262730 !important;
         color: white !important;
         border-radius: 10px;
-        border: 1px solid #475569;
     }
     
     div[data-testid="stNotification"] svg {
         fill: #ffffff !important;
     }
-
     </style>
     """,
     unsafe_allow_html=True
@@ -98,10 +89,9 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # --- YAHAN CUSTOM RESULT BOX USE KIYA HAI ---
+            # Displaying result in the custom dark box with white text
             st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
             
-            st.write("") # Gap for spacing
             st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
         except Exception as e:
-            st.error("Error: Could not translate text. Please check your internet connection.")
+            st.error("Error: Could not translate text.")
