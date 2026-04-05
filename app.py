@@ -7,6 +7,7 @@ from deep_translator import GoogleTranslator
 st.markdown(
     """
     <style>
+    /* Main App Background */
     .stApp {
         background: linear-gradient(135deg, #FFD580 0%, #FFB347 50%, #FFC966 100%);
         background-size: 400% 400%;
@@ -18,43 +19,49 @@ st.markdown(
         50%{background-position:100% 50%}
         100%{background-position:0% 50%}
     }
+    
     h1, h3 {
         font-family: 'Segoe UI', Tahoma, sans-serif;
-        color: #ffffff;
+        color: #ffffff !important;
         text-shadow: 2px 2px 8px #ff7f50;
         text-align: center;
     }
+
+    /* Buttons */
     .stButton>button {
-        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
-        color: #000000;
-        font-weight: bold;
-        border-radius: 12px;
-        padding: 10px 25px;
-        border: none;
+        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%) !important;
+        color: #000000 !important;
+        font-weight: bold !important;
+        border-radius: 12px !important;
+        padding: 10px 25px !important;
+        border: none !important;
     }
+
+    /* Input Text Area */
     textarea {
-        border-radius: 10px;
+        border-radius: 10px !important;
         border: 2px solid #FF8C00 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
     }
 
-    /* Translated text box (st.info) ko dark aur text ko white karne ke liye */
-    div[data-testid="stNotification"] {
-        background-color: #262730 !important; /* Dark color like dropdowns */
-        color: #ffffff !important; /* Pure white text */
-        border-radius: 10px;
-        border: 1px solid #475569;
+    /* CUSTOM DARK BOX FOR TRANSLATED TEXT */
+    .result-box {
+        background-color: #1E293B !important; /* Deep Dark Blue/Black */
+        color: #ffffff !important;           /* Pure White Text */
+        padding: 20px !important;
+        border-radius: 10px !important;
+        border: 2px solid #475569 !important;
+        font-size: 18px !important;
+        margin-top: 10px !important;
+        min-height: 100px !important;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3) !important;
     }
-
-    /* Box ke andar ka text force white karne ke liye */
-    div[data-testid="stNotification"] div {
+    
+    /* Force White text for any markdown inside result-box */
+    .result-box p {
         color: #ffffff !important;
     }
-
-    /* Icon color ko white karne ke liye */
-    div[data-testid="stNotification"] svg {
-        fill: #ffffff !important;
-    }
-
     </style>
     """,
     unsafe_allow_html=True
@@ -63,12 +70,12 @@ st.markdown(
 st.markdown('<div style="font-size:40px; text-align:center;">✨ 💛 ✨ 💛 ✨ 💛 ✨</div>', unsafe_allow_html=True)
 st.markdown("<h1>Welcome to Your Language Translator</h1>", unsafe_allow_html=True)
 
-# Translation logic using deep-translator
+# Translation logic
 translator = GoogleTranslator()
 langs_dict = translator.get_supported_languages(as_dict=True)
 languages = {name.title(): code for name, code in langs_dict.items()}
 
-text_to_translate = st.text_area("Enter text to translate:")
+text_to_translate = st.text_area("Enter text to translate:", height=150)
 
 col1, col2 = st.columns(2)
 with col1:
@@ -84,9 +91,11 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # st.info use kiya hai jo upar CSS se style ho chuka hai
-            st.info(result)
+            # --- YAHAN CHANGE HAI ---
+            # Humne st.info ki jagah custom HTML div use kiya hai styling ke liye
+            st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
             
-            st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
+            st.write("") # Gap ke liye
+            st.download_button(label="📋 Download Translation", data=result, file_name="translation.txt")
         except Exception as e:
-            st.error("Error: Could not translate text.")
+            st.error("Error: Could not translate text. Please check your internet connection.")
