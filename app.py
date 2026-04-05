@@ -7,7 +7,6 @@ from deep_translator import GoogleTranslator
 st.markdown(
     """
     <style>
-    /* Main App Background */
     .stApp {
         background: linear-gradient(135deg, #FFD580 0%, #FFB347 50%, #FFC966 100%);
         background-size: 400% 400%;
@@ -19,15 +18,12 @@ st.markdown(
         50%{background-position:100% 50%}
         100%{background-position:0% 50%}
     }
-    
     h1, h3 {
         font-family: 'Segoe UI', Tahoma, sans-serif;
         color: #ffffff !important;
         text-shadow: 2px 2px 8px #ff7f50;
         text-align: center;
     }
-
-    /* Buttons */
     .stButton>button {
         background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%) !important;
         color: #000000 !important;
@@ -36,8 +32,6 @@ st.markdown(
         padding: 10px 25px !important;
         border: none !important;
     }
-
-    /* Input Text Area */
     textarea {
         border-radius: 10px !important;
         border: 2px solid #FF8C00 !important;
@@ -45,7 +39,7 @@ st.markdown(
         color: #000000 !important;
     }
 
-    /* CUSTOM DARK BOX FOR TRANSLATED TEXT */
+    /* CUSTOM DARK BOX FOR TRANSLATED TEXT - JUST ADDED THIS SECTION */
     .result-box {
         background-color: #1E293B !important; /* Deep Dark Blue/Black */
         color: #ffffff !important;           /* Pure White Text */
@@ -58,10 +52,23 @@ st.markdown(
         box-shadow: 0px 4px 10px rgba(0,0,0,0.3) !important;
     }
     
-    /* Force White text for any markdown inside result-box */
+    /* Force White text inside the box */
     .result-box p {
         color: #ffffff !important;
     }
+
+    /* Backward compatibility for st.info if used */
+    div[data-testid="stNotification"] {
+        background-color: #1e293b !important;
+        color: white !important;
+        border-radius: 10px;
+        border: 1px solid #475569;
+    }
+    
+    div[data-testid="stNotification"] svg {
+        fill: #ffffff !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -70,7 +77,7 @@ st.markdown(
 st.markdown('<div style="font-size:40px; text-align:center;">✨ 💛 ✨ 💛 ✨ 💛 ✨</div>', unsafe_allow_html=True)
 st.markdown("<h1>Welcome to Your Language Translator</h1>", unsafe_allow_html=True)
 
-# Translation logic
+# Translation logic using deep-translator
 translator = GoogleTranslator()
 langs_dict = translator.get_supported_languages(as_dict=True)
 languages = {name.title(): code for name, code in langs_dict.items()}
@@ -91,11 +98,10 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # --- YAHAN CHANGE HAI ---
-            # Humne st.info ki jagah custom HTML div use kiya hai styling ke liye
+            # --- YAHAN CUSTOM RESULT BOX USE KIYA HAI ---
             st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
             
-            st.write("") # Gap ke liye
-            st.download_button(label="📋 Download Translation", data=result, file_name="translation.txt")
+            st.write("") # Gap for spacing
+            st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
         except Exception as e:
             st.error("Error: Could not translate text. Please check your internet connection.")
