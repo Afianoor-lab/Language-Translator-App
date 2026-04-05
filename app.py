@@ -43,7 +43,6 @@ st.markdown(
 
 st.markdown('<div style="font-size:40px; text-align:center;">✨ 💛 ✨ 💛 ✨ 💛 ✨</div>', unsafe_allow_html=True)
 st.markdown("<h1>Welcome to Your Language Translator</h1>", unsafe_allow_html=True)
-st.markdown("<h3>Translate text easily and beautifully!</h3>", unsafe_allow_html=True)
 
 # Translation logic using deep-translator
 translator = GoogleTranslator()
