@@ -6,7 +6,11 @@ import streamlit as st
 from googletrans import Translator
 
 # Initialize Translator
-translator = Translator()
+# NOTE: Using a try-except block for better stability on cloud deployment
+try:
+    translator = Translator()
+except Exception:
+    st.error("Translator initialization failed. Please refresh the page.")
 
 # ===============================
 # 🌟 Beautiful Front Page Styling
@@ -76,12 +80,13 @@ st.markdown(
         border-radius: 12px;
         padding: 10px 25px;
         box-shadow: 2px 2px 6px #888888;
+        border: none;
     }
 
     /* Text area styling */
     textarea {
         border-radius: 10px;
-        border: 2px solid #FF8C00;
+        border: 2px solid #FF8C00 !important;
         padding: 10px;
     }
     </style>
@@ -89,10 +94,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 🌟 Decorative top sparkles / lights
+# 🌟 Decorative elements
 st.markdown('<div class="decorative-lights">✨ 💛 ✨ 💛 ✨ 💛 ✨</div>', unsafe_allow_html=True)
-
-# 🌟 Left and Right side decorations
 st.markdown('<div class="side-decoration-left">✨ 🌸 ✨</div>', unsafe_allow_html=True)
 st.markdown('<div class="side-decoration-right">🌼 ✨ 🌸</div>', unsafe_allow_html=True)
 
@@ -106,42 +109,46 @@ st.markdown("---")
 # ===============================
 
 # Text Input
-text_to_translate = st.text_area("Enter text to translate:")
+text_to_translate = st.text_area("Enter text to translate:", height=150)
 
-# Language Options (added Russian)
+# Language Options
 from googletrans import LANGUAGES
-
-# Convert language codes to readable names
 languages = {name.title(): code for code, name in LANGUAGES.items()}
-
 
 # Dropdown for Source and Target Language
 col1, col2 = st.columns(2)
 with col1:
-    source_lang = st.selectbox("Select Source Language", options=list(languages.keys()))
+    source_lang = st.selectbox("Select Source Language", options=list(languages.keys()), index=list(languages.keys()).index('English') if 'English' in languages else 0)
 with col2:
-    target_lang = st.selectbox("Select Target Language", options=list(languages.keys()))
+    target_lang = st.selectbox("Select Target Language", options=list(languages.keys()), index=list(languages.keys()).index('Urdu') if 'Urdu' in languages else 1)
 
 # Translate Button
-if st.button("Translate"):
-    if text_to_translate.strip() == "":
-        st.warning("Please enter text to translate!")
+if st.button("Translate Now"):
+    if not text_to_translate.strip():
+        st.warning("Please enter some text to translate!")
     elif source_lang == target_lang:
-        st.warning("Source and target language cannot be the same!")
+        st.warning("Source and target languages are the same!")
     else:
         try:
-            result = translator.translate(text_to_translate, src=languages[source_lang], dest=languages[target_lang])
-            st.success("✅ Translation Completed!")
-            st.subheader("Translated Text:")
-            st.write(result.text)
+            with st.spinner('Translating...'):
+                result = translator.translate(
+                    text_to_translate, 
+                    src=languages[source_lang], 
+                    dest=languages[target_lang]
+                )
+                
+            st.success("✅ Done!")
+            st.markdown("### Translated Text:")
+            st.info(result.text)
 
-            # Copy Button
+            # Download Button
             st.download_button(
-                label="📋 Copy Translation",
+                label="📋 Download as Text File",
                 data=result.text,
-                file_name="translation.txt"
+                file_name="translated_text.txt",
+                mime="text/plain"
             )
 
         except Exception as e:
-            st.error("Error: Could not translate text.")
-            st.write(e)
+            st.error("Connection Error: Please try again in a moment.")
+            # st.write(e) # Uncomment for debugging
