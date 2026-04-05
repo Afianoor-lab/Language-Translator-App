@@ -18,12 +18,15 @@ st.markdown(
         50%{background-position:100% 50%}
         100%{background-position:0% 50%}
     }
-    h1, h3 {
+    
+    /* Welcome Text Styling (Original preserved) */
+    h1 {
         font-family: 'Segoe UI', Tahoma, sans-serif;
-        color: #ffffff !important;
+        color: #ffffff;
         text-shadow: 2px 2px 8px #ff7f50;
         text-align: center;
     }
+
     .stButton>button {
         background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%) !important;
         color: #000000 !important;
@@ -32,14 +35,15 @@ st.markdown(
         padding: 10px 25px !important;
         border: none !important;
     }
+    
     textarea {
         border-radius: 10px !important;
         border: 2px solid #FF8C00 !important;
     }
 
-    /* --- YE SECTION BOX KO DARK AUR TEXT KO WHITE KAREGA --- */
+    /* --- DARK BOX FOR TRANSLATED TEXT ONLY --- */
     .translated-box {
-        background-color: #262730 !important; /* Exactly like selectbox */
+        background-color: #262730 !important; /* Matches selectbox background */
         color: #ffffff !important;           /* Pure white text */
         padding: 20px !important;
         border-radius: 10px !important;
@@ -77,7 +81,7 @@ if st.button("Translate"):
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
             st.subheader("Translated Text:")
             
-            # --- YAHAN CHANGE KIYA HAI: Custom box display ---
+            # Displaying result in the dark box with white text
             st.markdown(f'<div class="translated-box">{result}</div>', unsafe_allow_html=True)
             
             st.download_button(label="📋 Copy Translation", data=result, file_name="translation.txt")
