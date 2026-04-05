@@ -64,7 +64,6 @@ if st.button("Translate"):
     else:
         try:
             result = GoogleTranslator(source=languages[source_lang], target=languages[target_lang]).translate(text_to_translate)
-            st.success("✅ Translation Completed!")
             st.subheader("Translated Text:")
             st.info(result)
             
